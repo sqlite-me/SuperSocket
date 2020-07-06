@@ -29,6 +29,11 @@ namespace SuperSocket.SocketBase.Config
         string ServerType { get; }
 
         /// <summary>
+        /// Get App Domain ShadowCopyFiles
+        /// </summary>
+        bool? ShadowCopyFiles { get; }
+
+        /// <summary>
         /// Gets the Receive filter factory.
         /// </summary>
         string ReceiveFilterFactory { get; }

@@ -35,7 +35,7 @@ namespace SuperSocket.SocketEngine
 
             if (string.IsNullOrEmpty(m_Config.LogFactory))
             {
-                m_DefaultLogFactory = new ProviderFactoryInfo(ProviderKey.LogFactory, string.Empty, typeof(Log4NetLogFactory));
+                m_DefaultLogFactory = new ProviderFactoryInfo(ProviderKey.LogFactory, string.Empty, typeof(NLogExFactory));
                 return m_DefaultLogFactory;
             }
 

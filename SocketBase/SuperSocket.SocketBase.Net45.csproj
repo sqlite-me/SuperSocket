@@ -61,13 +61,17 @@
     <AssemblyOriginatorKeyFile>..\supersocket.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="log4net">
-      <HintPath>..\Reference\log4net.dll</HintPath>
-      <Private>False</Private>
+    <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
+      <HintPath>..\packages\NLog.4.7.2\lib\net45\NLog.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.IO.Compression" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Transactions" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Configuration" />
   </ItemGroup>
@@ -108,8 +112,8 @@
     <Compile Include="Logging\ConsoleLogFactory.cs" />
     <Compile Include="Logging\ILog.cs" />
     <Compile Include="Logging\ILogFactory.cs" />
-    <Compile Include="Logging\Log4NetLog.cs" />
-    <Compile Include="Logging\Log4NetLogFactory.cs" />
+    <Compile Include="Logging\NLogEx.cs" />
+    <Compile Include="Logging\NLogExFactory.cs" />
     <Compile Include="Logging\LogFactoryBase.cs" />
     <Compile Include="Metadata\AppServerMetadataTypeAttribute.cs" />
     <Compile Include="Metadata\CommandFilterAttribute.cs" />
@@ -198,6 +202,9 @@
       <ProductName>Windows Installer 3.1</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -28,6 +28,12 @@ namespace SuperSocket.SocketEngine.Configuration
         }
 
         /// <summary>
+        /// Gets the ShadowCopyFiles
+        /// </summary>
+        [ConfigurationProperty("shadowCopyFiles",IsRequired =false)]
+        public bool ShadowCopyFiles { get { return (bool)this["shadowCopyFiles"]; } }
+
+        /// <summary>
         /// Gets the service configurations
         /// </summary>
         [ConfigurationProperty("serverTypes")]

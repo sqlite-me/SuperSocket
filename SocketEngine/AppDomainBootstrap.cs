@@ -10,6 +10,9 @@ using SuperSocket.SocketBase.Logging;
 using SuperSocket.SocketBase.Provider;
 using SuperSocket.SocketEngine.Configuration;
 using SuperSocket.SocketBase.Metadata;
+using System.Threading.Tasks;
+using System.IO;
+using System.Threading;
 
 namespace SuperSocket.SocketEngine
 {
@@ -96,6 +99,8 @@ namespace SuperSocket.SocketEngine
     partial class AppDomainBootstrap : MarshalByRefObject, ILoggerProvider, IBootstrap, IDisposable
     {
         private IBootstrap m_InnerBootstrap;
+        private bool disposing;
+        private FileSystemWatcher watcher;
 
         /// <summary>
         /// Gets all the app servers running in this bootstrap
@@ -147,7 +152,7 @@ namespace SuperSocket.SocketEngine
                 throw new ArgumentNullException("config");
 
             var configSectionSource = config as ConfigurationSection;
-
+            
             if (configSectionSource != null)
                 startupConfigFile = configSectionSource.GetConfigSource();
 
@@ -159,6 +164,52 @@ namespace SuperSocket.SocketEngine
             m_InnerBootstrap = CreateBootstrapWrap(this, config, startupConfigFile);
 
             AppDomain.CurrentDomain.SetData("Bootstrap", this);
+
+            startFileWatcher();
+        }
+
+        /// <summary>
+        /// watching file changed
+        /// </summary>
+        private void startFileWatcher() {
+            DateTime timeChanged = DateTime.MaxValue;
+            ILoggerProvider logger = this;
+            Task task = null;
+            var dir = Path.GetFullPath(".\\");
+            watcher = new System.IO.FileSystemWatcher(dir);
+            watcher.EnableRaisingEvents = true;
+            watcher.Changed += (s, e) => {
+            if(e.Name.EndsWith(".exe", StringComparison.OrdinalIgnoreCase)
+                || e.Name.EndsWith(".dll", StringComparison.OrdinalIgnoreCase)
+                ||e.Name.EndsWith(".config", StringComparison.OrdinalIgnoreCase))
+                {
+                    timeChanged = DateTime.Now.AddSeconds(5);
+                    if(task==null)
+                        task=Task.Factory.StartNew(fun);
+                }
+            };
+            void fun() {
+                while (DateTime.Now < timeChanged&&!disposing)
+                {
+                    Thread.Sleep(500);
+                }
+                if (disposing) return;
+                task = null;
+                logger.Logger?.Info("File changed,rebootstrap ...");
+                try {
+                    m_InnerBootstrap.Stop();
+                    m_InnerBootstrap = CreateBootstrapWrap(this,(IConfigurationSource)Config, StartupConfigFile);
+                    m_InnerBootstrap.Initialize();
+                    m_InnerBootstrap.Start();
+                    logger.Logger?.Info("File changed,rebootstraped");
+                }
+                catch(Exception exc) {
+                    if (logger.Logger == null)
+                        throw exc;
+                    logger.Logger.Error("rebootstrap error", exc);
+                }
+            }
+            
         }
 
         protected virtual IBootstrap CreateBootstrapWrap(IBootstrap bootstrap, IConfigurationSource config, string startupConfigFile)
@@ -243,6 +294,9 @@ namespace SuperSocket.SocketEngine
 
         void IDisposable.Dispose()
         {
+            disposing = true;
+            watcher.Dispose();
+
             var disposableBootstrap = m_InnerBootstrap as IDisposable;
             if (disposableBootstrap != null)
                 disposableBootstrap.Dispose();

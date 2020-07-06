@@ -96,6 +96,8 @@ namespace SuperSocket.SocketBase.Provider
             if (m_LoadedType == null)
             {
                 m_LoadedType = AssemblyUtil.GetType(TypeName, true, true);
+                if (m_LoadedType == null)
+                    throw new TypeLoadException($"not found Type {TypeName}");
             }
 
             return (T)creator(m_LoadedType);

@@ -24,6 +24,18 @@ namespace SuperSocket.SocketEngine.Configuration
         /// <value>
         /// The name of the server type.
         /// </value>
+        [ConfigurationProperty("shadowCopyFiles", IsRequired = false)]
+        public bool? ShadowCopyFiles
+        {
+            get { return this["shadowCopyFiles"] as bool?; }
+        }
+
+        /// <summary>
+        /// Gets the name of the server type this appServer want to use.
+        /// </summary>
+        /// <value>
+        /// The name of the server type.
+        /// </value>
         [ConfigurationProperty("serverTypeName", IsRequired = false)]
         public string ServerTypeName
         {

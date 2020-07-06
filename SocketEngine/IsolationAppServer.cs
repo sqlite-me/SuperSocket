@@ -28,6 +28,8 @@ namespace SuperSocket.SocketEngine
 
         public string Name { get; private set; }
 
+        public string ShadowCopyFiles { get; set; }
+
         private StatusInfoAttribute[] m_ServerStatusMetadata;
 
         private AutoResetEvent m_StopResetEvent = new AutoResetEvent(false);
@@ -89,7 +91,8 @@ namespace SuperSocket.SocketEngine
             {
                 ApplicationName = Name,
                 ApplicationBase = workingDir,
-                ConfigurationFile = startupConfigFile
+                ConfigurationFile = startupConfigFile,
+                ShadowCopyFiles= ShadowCopyFiles,
             });
 
             var assemblyImportType = typeof(AssemblyImport);
@@ -110,6 +113,7 @@ namespace SuperSocket.SocketEngine
         {
             State = ServerState.Initializing;
             Name = config.Name;
+            ShadowCopyFiles = config.ShadowCopyFiles?.ToString();
             Bootstrap = bootstrap;
             Config = config;
             Factories = factories;

@@ -84,7 +84,10 @@ namespace SuperSocket.SocketBase.Config
         /// Gets/sets the isolation mode.
         /// </summary>
         public IsolationMode Isolation { get; set; }
-
+        /// <summary>
+        /// Gets/sets the ShadowCopyFiles state
+        /// </summary>
+        public bool ShadowCopyFiles { get; set; }
         /// <summary>
         /// Gets/sets the log factory name.
         /// </summary>

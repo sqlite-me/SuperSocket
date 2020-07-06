@@ -29,7 +29,14 @@ namespace SuperSocket.SocketBase.Config
         {
             if (source.Servers != null && source.Servers.Any())
             {
-                this.Servers = source.Servers.Select(s => new ServerConfig(s)).ToArray();
+                this.Servers = source.Servers.Select(s => {
+                   var sConfig= new ServerConfig(s);
+                    if (!sConfig.ShadowCopyFiles.HasValue)
+                    {
+                        sConfig.ShadowCopyFiles = source.ShadowCopyFiles;
+                    }
+                    return sConfig;
+                }).ToArray();
             }
 
             if (source.ServerTypes != null && source.ServerTypes.Any())

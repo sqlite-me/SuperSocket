@@ -462,10 +462,11 @@ namespace SuperSocket.SocketBase
         /// Setups with the specified port.
         /// </summary>
         /// <param name="port">The port.</param>
+        /// <param name="shadowCopyFiles"></param>
         /// <returns>return setup result</returns>
-        public bool Setup(int port)
+        public bool Setup(int port,bool shadowCopyFiles=false)
         {
-            return Setup("Any", port);
+            return Setup("Any", port,shadowCopyFiles);
         }
 
         private void TrySetInitializedState()
@@ -608,19 +609,21 @@ namespace SuperSocket.SocketBase
         /// </summary>
         /// <param name="ip">The ip.</param>
         /// <param name="port">The port.</param>
+        /// <param name="shadowCopyFiles"></param>
         /// <param name="socketServerFactory">The socket server factory.</param>
         /// <param name="receiveFilterFactory">The Receive filter factory.</param>
         /// <param name="logFactory">The log factory.</param>
         /// <param name="connectionFilters">The connection filters.</param>
         /// <param name="commandLoaders">The command loaders.</param>
         /// <returns>return setup result</returns>
-        public bool Setup(string ip, int port, ISocketServerFactory socketServerFactory = null, IReceiveFilterFactory<TRequestInfo> receiveFilterFactory = null, ILogFactory logFactory = null, IEnumerable<IConnectionFilter> connectionFilters = null, IEnumerable<ICommandLoader<ICommand<TAppSession, TRequestInfo>>> commandLoaders = null)
+        public bool Setup(string ip, int port,bool shadowCopyFiles, ISocketServerFactory socketServerFactory = null, IReceiveFilterFactory<TRequestInfo> receiveFilterFactory = null, ILogFactory logFactory = null, IEnumerable<IConnectionFilter> connectionFilters = null, IEnumerable<ICommandLoader<ICommand<TAppSession, TRequestInfo>>> commandLoaders = null)
         {
             return Setup(new ServerConfig
                             {
                                 Ip = ip,
-                                Port = port
-                            },
+                                Port = port,
+                ShadowCopyFiles= shadowCopyFiles
+            },
                           socketServerFactory,
                           receiveFilterFactory,
                           logFactory,
@@ -762,7 +765,7 @@ namespace SuperSocket.SocketBase
 
             //Log4NetLogFactory is default log factory
             if (LogFactory == null)
-                LogFactory = new Log4NetLogFactory();
+                LogFactory = new NLogExFactory();
 
             return true;
         }

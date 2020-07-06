@@ -164,7 +164,10 @@ namespace SuperSocket.SocketBase.Config
         /// Gets/sets the port.
         /// </summary>
         public int Port { get; set; }
-
+        /// <summary>
+        /// Gets/sets the ShadowCopyFiles state
+        /// </summary>
+        public bool? ShadowCopyFiles { get; set; }
         /// <summary>
         /// Gets/sets the options.
         /// </summary>

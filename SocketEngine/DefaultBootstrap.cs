@@ -116,7 +116,7 @@ namespace SuperSocket.SocketEngine
         /// </summary>
         /// <param name="appServers">The app servers.</param>
         public DefaultBootstrap(IEnumerable<IWorkItem> appServers)
-            : this(new RootConfig(), appServers, new Log4NetLogFactory())
+            : this(new RootConfig(), appServers, new NLogExFactory())
         {
 
         }
@@ -127,7 +127,7 @@ namespace SuperSocket.SocketEngine
         /// <param name="rootConfig">The root config.</param>
         /// <param name="appServers">The app servers.</param>
         public DefaultBootstrap(IRootConfig rootConfig, IEnumerable<IWorkItem> appServers)
-            : this(rootConfig, appServers, new Log4NetLogFactory())
+            : this(rootConfig, appServers, new NLogExFactory())
         {
 
         }

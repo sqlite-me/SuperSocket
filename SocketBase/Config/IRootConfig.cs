@@ -60,7 +60,11 @@ namespace SuperSocket.SocketBase.Config
         /// Gets the isolation mode.
         /// </summary>
         IsolationMode Isolation { get; }
-
+        
+        /// <summary>
+        /// Gets ShadowCopyFiles state
+        /// </summary>
+        bool ShadowCopyFiles { get; }
 
         /// <summary>
         /// Gets the option elements.
